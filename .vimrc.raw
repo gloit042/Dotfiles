@@ -1,0 +1,120 @@
+let mapleader=","
+
+
+:runtime! ftplugin/man.vim
+
+
+filetype on
+filetype plugin on
+syntax on
+autocmd InsertLeave * se nocul
+autocmd InsertEnter * se cul
+set showcmd
+set novisualbell
+set laststatus=1
+set foldenable
+set foldcolumn=0
+set foldlevel=1
+
+nnoremap <leader>w :w!<cr>
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+
+nnoremap tn :tabnext<CR>
+nnoremap tp :tabprevious<CR>
+nnoremap td :tabnew<CR>
+nnoremap te :tabedit
+nnoremap tc :tabclose<CR>
+
+nnoremap bn :bnext<CR>
+nnoremap bp :bpre<CR>
+nnoremap bd :bd<CR>
+
+nnoremap en :lnext<CR>
+nnoremap ep :lprevious<CR>
+
+
+vmap <C-c> "+y
+
+set autoread
+set completeopt=preview,menu,menuone,longest
+set clipboard+=unnamed
+set nobackup
+:set makeprg=g++\ -Wall\ \ %
+set autowrite
+set ruler
+set cursorline
+set magic
+
+set nocompatible
+set noeb
+set confirm
+
+set autoindent
+set cindent
+
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+
+set smarttab
+set number
+set history=1000
+set nobackup
+set noswapfile
+set ignorecase
+set hlsearch
+set incsearch
+set gdefault
+set enc=utf-8
+set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
+set langmenu=zh_CN.UTF-8
+set helplang=cn
+set laststatus=2
+
+
+set viminfo+=!
+set iskeyword+=_,$,@,%,#,-
+set linespace=0
+set wildmenu
+set backspace=2
+set whichwrap+=<,>,h,l
+set mouse=a
+set selection=exclusive
+set selectmode=mouse,key
+set report=0
+set fillchars=vert:\ ,stl:\ ,stlnc:\
+set showmatch
+set matchtime=1
+set scrolloff=3
+set smartindent
+set listchars=tab:>-,eol:-,trail:-,precedes:<,extends:>
+function! ClosePair(char)
+if getline('.')[col('.') - 1] == a:char
+    return "\<Right>"
+else
+    return a:char
+endif
+endfunction
+filetype plugin indent on
+
+
+map <F10> :call FormatSrc()<CR><CR>
+
+
+filetype plugin indent on
+syntax enable
+
+set expandtab
+
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+tnoremap <ESC> <C-\><C-n>
+
+let g:netrw_list_hide = ''

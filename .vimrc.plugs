@@ -1,0 +1,567 @@
+let mapleader=","
+
+
+:runtime! ftplugin/man.vim "开启vim内Man命令
+
+
+filetype on
+filetype plugin on
+set go=             " 不要图形按钮
+syntax on           " 语法高亮
+autocmd InsertLeave * se nocul  " 用浅色高亮当前行
+autocmd InsertEnter * se cul    " 用浅色高亮当前行
+"set ruler           " 显示标尺
+set showcmd         " 输入的命令显示出来，看的清楚些
+"set cmdheight=1     " 命令行（在状态行下）的高度，设置为1
+"set whichwrap+=<,>,h,l   " 允许backspace和光标键跨越行边界(不建议)
+"set scrolloff=3     " 光标移动到buffer的顶部和底部时保持3行距离
+set novisualbell    " 不要闪烁(不明白)
+"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}   "状态行显示的内容
+set laststatus=1    " 启动显示状态行(1),总是显示状态行(2)
+set foldenable      " 允许折叠
+"set foldmethod=syntax
+set foldcolumn=0
+set foldlevel=1
+
+call plug#begin('/home/gloit/.local/share/nvim/plugged')
+Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp', 'haskell', 'python', 'javascript', 'rust'] }
+call plug#end()
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"键盘命令
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nnoremap <leader>w :w!<cr>
+
+nnoremap <leader>gs :Gstatus
+nnoremap <leader>gd :Gdiff
+nnoremap <leader>gc :Gcommit
+nnoremap <leader>gb :Gblame
+nnoremap <leader>gl :Glog
+nnoremap <leader>gp :Git push
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+
+nnoremap tn :tabnext<CR>
+nnoremap tp :tabprevious<CR>
+nnoremap td :tabnew<CR>
+nnoremap te :tabedit
+nnoremap tc :tabclose<CR>
+
+nnoremap bn :bnext<CR>
+nnoremap bp :bpre<CR>
+nnoremap bd :bd<CR>
+
+nnoremap en :lnext<CR>
+nnoremap ep :lprevious<CR>
+
+
+" 选中状态下 Ctrl+c 复制
+vmap <C-c> "+y
+"C，C++ 按F5编译运行
+map <F5> :call CompileRunGcc()<CR>
+func! CompileRunGcc()
+    exec "w"
+    if &filetype == 'python'
+        "exec "!ipython %"
+    elseif &filetype == 'c'
+        exec "!gcc -std=c99 % -o %<"
+        exec "! ./%<"
+    elseif &filetype == 'cpp'
+        exec "!g++ -std=c++11 % -o %<"
+        exec "! ./%<"
+    elseif &filetype == 'java'
+        exec "!javac %"
+        exec "!java %<"
+    elseif &filetype == 'sh'
+        :!./%
+    elseif &filetype == 'rust'
+        exec "!cargo run"
+    endif
+endfunc
+"C,C++的调试
+map <F8> :call Rungdb()<CR>
+func! Rungdb()
+    exec "w"
+    if &filetype == 'c'
+        exec "!gcc % -g -o %<"
+        exec "!gdb ./%<"
+    elseif &filetype == 'cpp'
+        exec "!g++ & -g -o %<"
+        exec "!gdb ./%<"
+    endif
+endfunc
+
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""实用设置
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 设置当文件被改动时自动载入
+set autoread
+" quickfix模式
+""autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
+"代码补全
+set completeopt=preview,menu,menuone,longest
+"共享剪贴板
+set clipboard+=unnamed
+"从不备份
+set nobackup
+"make 运行
+:set makeprg=g++\ -Wall\ \ %
+"自动保存
+set autowrite
+set ruler                   " 打开状态栏标尺
+set cursorline              " 突出显示当前行
+set magic                   " 设置魔术
+set guioptions-=T           " 隐藏工具栏
+set guioptions-=m           " 隐藏菜单栏
+
+" 不要使用vi的键盘模式，而是vim自己的
+set nocompatible
+" 去掉输入错误的提示声音
+set noeb
+" 在处理未保存或只读文件的时候，弹出确认
+set confirm
+
+" 自动缩进
+set autoindent
+set cindent
+
+" Tab键的宽度
+set tabstop=4
+" 统一缩进为4
+set softtabstop=4
+set shiftwidth=4
+
+" 不要用空格代替制表符
+" 在行和段开始处使用制表符
+set smarttab
+" 显示行号
+set number
+" 历史记录数
+set history=1000
+"禁止生成临时文件
+set nobackup
+set noswapfile
+"搜索忽略大小写
+set ignorecase
+"搜索逐字符高亮
+set hlsearch
+set incsearch
+"行内替换
+set gdefault
+"编码设置
+set enc=utf-8
+set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
+"语言设置
+set langmenu=zh_CN.UTF-8
+set helplang=cn
+" 总是显示状态行
+set laststatus=2
+
+
+set viminfo+=!
+" 带有如下符号的单词不要被换行分割
+set iskeyword+=_,$,@,%,#,-
+" 字符间插入的像素行数目
+set linespace=0
+" 增强模式中的命令行自动完成操作
+set wildmenu
+" 使回格键（backspace）正常处理indent, eol, start等
+set backspace=2
+" 允许backspace和光标键跨越行边界
+set whichwrap+=<,>,h,l
+" 可以在buffer的任何地方使用鼠标（类似office中在工作区双击鼠标定位）
+set mouse=a
+set selection=exclusive
+set selectmode=mouse,key
+" 通过使用: commands命令，告诉我们文件的哪一行被改变过
+set report=0
+" 在被分割的窗口间显示空白，便于阅读
+set fillchars=vert:\ ,stl:\ ,stlnc:\
+" 高亮显示匹配的括号
+set showmatch
+" 匹配括号高亮的时间（单位是十分之一秒）
+set matchtime=1
+" 光标移动到buffer的顶部和底部时保持3行距离
+set scrolloff=3
+" 为C程序提供自动缩进
+set smartindent
+set listchars=tab:>-,eol:-,trail:-,precedes:<,extends:>
+"自动补全
+function! ClosePair(char)
+if getline('.')[col('.') - 1] == a:char
+    return "\<Right>"
+else
+    return a:char
+endif
+endfunction
+filetype plugin indent on
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+
+
+"settings for , 'rust'airline
+let g:airline#extensions#hunks#enabled = 1
+let g:airline#extensions#ycm#enabled = 1
+let g:airline_powerline_fonts = 1
+  if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+  endif
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#bufferline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+autocmd FileType rust let g:airline#extensions#tagbar#enabled = 0
+
+
+" {{{Settings for tagbar
+nnoremap <leader>t :TagbarToggle<CR>
+autocmd FileType haskell let g:tagbar_type_haskell = {
+    \ 'ctagsbin'  : 'hasktags',
+    \ 'ctagsargs' : '-x -c -o-',
+    \ 'kinds'     : [
+        \  'm:modules:0:1',
+        \  'd:data: 0:1',
+        \  'd_gadt: data gadt:0:1',
+        \  't:type names:0:1',
+        \  'nt:new types:0:1',
+        \  'c:classes:0:1',
+        \  'cons:constructors:1:1',
+        \  'c_gadt:constructor gadt:1:1',
+        \  'c_a:constructor accessors:1:1',
+        \  'ft:function types:1:1',
+        \  'fi:function implementations:0:1',
+        \  'o:others:0:1'
+    \ ],
+    \ 'sro'        : '.',
+    \ 'kind2scope' : {
+        \ 'm' : 'module',
+        \ 'c' : 'class',
+        \ 'd' : 'data',
+        \ 't' : 'type'
+    \ },
+    \ 'scope2kind' : {
+        \ 'module' : 'm',
+        \ 'class'  : 'c',
+        \ 'data'   : 'd',
+        \ 'type'   : 't'
+    \ }
+\ }
+
+
+autocmd FileType markdown let g:tagbar_type_markdown = {
+    \ 'ctagstype': 'markdown',
+    \ 'ctagsbin' : '/home/gloit/.local/bin/markdown2ctags',
+    \ 'ctagsargs' : '-f - --sort=yes',
+    \ 'kinds' : [
+        \ 's:sections',
+        \ 'i:images'
+    \ ],
+    \ 'sro' : '|',
+    \ 'kind2scope' : {
+        \ 's' : 'section',
+    \ },
+    \ 'sort': 0,
+\ }
+
+autocmd FileType rust let g:tagbar_type_rust = {
+    \ 'ctagstype' : 'rust',
+    \ 'kinds' : [
+        \'T:types,type definitions',
+        \'f:functions,function definitions',
+        \'g:enum,enumeration names',
+        \'s:structure names',
+        \'m:modules,module names',
+        \'c:consts,static constants',
+        \'t:traits',
+        \'i:impls,trait implementations',
+    \]
+    \}
+" }}} 
+
+
+
+"代码格式优化化
+
+map <F10> :call FormatSrc()<CR><CR>
+
+
+let g:haskellmode_completion_ghc=1
+
+autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+
+autocmd FileType haskell map <silent> ti :GhcModTypeInsert<CR>
+autocmd FileType haskell map <silent> ts :GhcModSplitFunCase<CR>
+autocmd FileType haskell map <silent> tt :GhcModType<CR>
+autocmd FileType haskell map <silent> tc :GhcModTypeClear<CR>
+
+
+autocmd FileType haskell let g:syntastic_always_populate_loc_list = 1
+
+
+
+autocmd FileType rust set hidden
+autocmd FileType rust let g:racer_cmd = "/home/gloit/.cargo/bin/racer"
+autocmd FileType rust let g:rustfmt_command = "rustfmt"
+autocmd FileType rust let g:rustfmt_autosave = 1
+autocmd FileType rust let g:racer_experimental_completer=1
+autocmd FileType rust let g:AutoPairs={'(':')', '[':']', '{':'}','"':'"'}
+autocmd FileType rust let g:syntastic_always_populate_loc_list = 1
+autocmd FileType rust let g:rust_use_custom_ctags_defs = 1
+
+
+autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/,$RUST_SRC_PATH/libstd/rusty-tags.vi
+autocmd BufWrite *.rs exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" | redraw!
+
+autocmd FileType javascript set tabstop=2
+autocmd FileType javascript set shiftwidth=2
+autocmd FileType java set tabstop=2
+autocmd FileType java set shiftwidth=2
+autocmd FileType html set tabstop=2
+autocmd FileType html set shiftwidth=2
+autocmd FileType css set tabstop=2
+autocmd FileType css set shiftwidth=2
+
+
+
+"let g:syntastic_rust_checkers = ['cargo']
+let g:syntastic_haskell_checkers = ['hlint', 'ghc-mod']
+let g:syntastic_vue_checkers= ['eslint']
+
+"indentline setting
+let g:indentLine_load=1
+let g:indentLine_char='┆'
+
+
+"dein Scripts-----------------------------
+if &compatible
+  set nocompatible               " Be iMproved
+endif
+
+" Required:
+set runtimepath+=/home/gloit/.vim/bundles/repos/github.com/Shougo/dein.vim
+
+" Required:
+if dein#load_state('/home/gloit/.vim/bundles')
+  call dein#begin('/home/gloit/.vim/bundles')
+
+  " Let dein manage dein
+  " Required:
+  call dein#add('/home/gloit/.vim/bundles/repos/github.com/Shougo/dein.vim')
+
+  " Add or remove your plugins here:
+  "
+
+
+  call dein#add('jiangmiao/auto-pairs')
+
+  "{{{ deoplete configs
+  call dein#add('Shougo/deoplete.nvim', {
+              \ 'on_ft' : ['haskell']
+              \ })
+  "call dein#config('deoplete.nvim', {
+  "            \ 'lazy' : 1, 'on_i' : 1,
+  "            \ })
+  "call dein#add('zchee/deoplete-clang', {
+  "            \'on_ft' : ['c', 'cpp', 'h', 'hpp']
+  "            \ })
+  "call dein#add('carlitux/deoplete-ternjs',{
+  "            \'on_ft' : ['javascript']
+  "            \ })
+  "call dein#add('zchee/deoplete-jedi', {
+  "            \'on_ft' : ['python']
+  "            \ })
+  "call dein#add('OrangeT/vim-csharp',{
+  "            \'on_ft' : ['cs']
+              \ })
+  "}}}
+" {{{haskell plugins
+  call dein#add('eagletmt/ghcmod-vim', {
+              \'on_ft' : 'haskell'
+              \})
+  call dein#add('eagletmt/neco-ghc', {
+              \'on_ft' : 'haskell'
+              \})
+  call dein#add('itchyny/vim-haskell-indent', {
+              \'on_ft' : 'haskell'
+              \})
+" }}}
+" {{{ rust plugins
+  "call dein#add('racer-rust/vim-racer', {
+  "            \'on_ft' : 'rust'
+  "            \})
+  call dein#add('rust-lang/rust.vim', {
+              \'on_ft' : 'rust'
+              \})
+" }}}
+
+  call dein#add('pangloss/vim-javascript', {
+              \'on_ft' : 'javascript'
+              \})
+
+  call dein#add('Shougo/neosnippet-snippets')
+  call dein#add('Shougo/neosnippet.vim')
+  call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+  call dein#add('Yggdroot/LeaderF')
+  " {{{ indentline formats
+  call dein#add('Yggdroot/indentLine', {
+              \'on_ft' : [
+              \             'rust',
+              \             'python',
+              \             'c',
+              \             'cpp',
+              \             'haskell',
+              \             'vim',
+              \             'makefile'
+              \          ]
+              \})
+  " }}}
+  call dein#add('altercation/vim-colors-solarized')
+  call dein#add('bling/vim-bufferline')
+  call dein#add('scrooloose/syntastic')
+  call dein#add('tpope/vim-fugitive')
+  call dein#add('tpope/vim-vinegar')
+  call dein#add('vim-airline/vim-airline')
+  call dein#add('vim-airline/vim-airline-themes')
+  call dein#add('majutsushi/tagbar')
+
+  call dein#add('posva/vim-vue', {
+              \'on_ft': ['vue']
+              \})
+
+  call dein#add('godlygeek/tabular', {
+              \'on_ft': ['markdown', 'javascript']
+              \})
+  call dein#add('plasticboy/vim-markdown', {
+              \'on_ft': ['markdown']
+              \})
+  call dein#add('nelstrom/vim-markdown-folding', {
+              \'on_ft': ['markdown']
+              \})
+  "call dein#add('suan/vim-instant-markdown', {
+  "            \'on_ft': ['markdown']
+  "            \})
+
+  call dein#add('ararslan/llvm.vim')
+  "call dein#add('thomasding/vim-coqide')
+  call dein#add('/home/gloit/.vim/bundles/repos/github.com/thomasding/vim-coqide')
+
+
+  " You can specify revision/branch/tag.
+  "call dein#add('Shougo/vimshell')
+
+  " Required:
+  call dein#end()
+  call dein#save_state()
+endif
+
+
+" Required:
+filetype plugin indent on
+syntax enable
+set background=dark
+colorscheme solarized
+
+" If you want to install not installed plugins on startup.
+"if dein#check_install()
+"  call dein#install()
+"endif
+
+"End dein Scripts-------------------------
+
+
+"deoplete setting
+
+"let g:deoplete#sources#clang#libclang_path='/usr/lib/libclang.so'
+"let g:deoplete#sources#clang#clang_header='/usr/lib/clang'
+"
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
+
+
+
+" Use deoplete.
+let g:tern_request_timeout = 1
+let g:tern_show_signature_in_pum = '0'  " This do disable full signature type on autocomplete
+
+"Add extra filetypes
+let g:tern#filetypes = [
+                \ 'jsx',
+                \ 'javascript.jsx',
+                \ 'vue',
+                \ ]
+
+" vim markdown config
+let g:vim_markdown_math = 1
+
+
+set expandtab
+
+" neosnippet
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+"imap <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
+let g:ycm_python_binary_path = '/usr/bin/python'
+" auto trigger completion
+let g:ycm_auto_trigger  = 1
+
+let g:ycm_filetype_blacklist = {
+      \ 'tagbar' : 1,
+      \ 'qf' : 1,
+      \ 'notes' : 1,
+      \ 'markdown' : 1,
+      \ 'unite' : 1,
+      \ 'text' : 1,
+      \ 'vimwiki' : 1,
+      \ 'pandoc' : 1,
+      \ 'infolog' : 1,
+      \ 'mail' : 1
+      \}
+
+let g:ycm_warning_symbol = '*>'
+let g:ycm_confirm_extra_conf = 0
+
+
+
+nnoremap <silent> gd :YcmCompleter GoToImprecise<CR>
+nnoremap <silent> gt :YcmCompleter GetType<CR>
+nnoremap <silent> gf :YcmCompleter FixIt<CR>
+autocmd FileType python nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
+autocmd FileType rust nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
+autocmd FileType javascript nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
+let g:vim_markdown_folding_disabled = 1
+
+tnoremap <ESC> <C-\><C-n>
+
+let g:netrw_list_hide = ''
+
+" inccommand on
+set icm=split
