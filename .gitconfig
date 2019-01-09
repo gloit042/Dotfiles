@@ -1,0 +1,8 @@
+[user]
+    name = gloit
+    email = gloit042@gmail.com
+[alias]
+	lol = log --graph --decorate --pretty=oneline --all --abbrev-commit
+[core]
+	crlf = false
+	editor = vim

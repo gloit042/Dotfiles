@@ -84,7 +84,6 @@ set wildmenu
 set backspace=2
 set whichwrap+=<,>,h,l
 set mouse=a
-set selection=exclusive
 set selectmode=mouse,key
 set report=0
 set fillchars=vert:\ ,stl:\ ,stlnc:\
