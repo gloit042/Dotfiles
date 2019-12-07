@@ -10,7 +10,6 @@ set go=             " 不要图形按钮
 syntax on           " 语法高亮
 autocmd InsertLeave * se nocul  " 用浅色高亮当前行
 autocmd InsertEnter * se cul    " 用浅色高亮当前行
-"set ruler           " 显示标尺
 set showcmd         " 输入的命令显示出来，看的清楚些
 "set cmdheight=1     " 命令行（在状态行下）的高度，设置为1
 "set whichwrap+=<,>,h,l   " 允许backspace和光标键跨越行边界(不建议)
@@ -23,7 +22,7 @@ set foldenable      " 允许折叠
 set foldcolumn=0
 set foldlevel=1
 
-call plug#begin('/home/gloit/.local/share/nvim/plugged')
+call plug#begin('/home/gloit/.vim/bundle')
 Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp', 'haskell', 'python', 'javascript', 'rust'] }
 call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -33,6 +32,8 @@ call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 nnoremap <leader>w :w!<cr>
+
+inoremap <C-c> <ESC>
 
 nnoremap <leader>gs :Gstatus
 nnoremap <leader>gd :Gdiff
@@ -55,7 +56,7 @@ nnoremap tc :tabclose<CR>
 
 nnoremap bn :bnext<CR>
 nnoremap bp :bpre<CR>
-nnoremap bd :bd<CR>
+nnoremap bd :BD<CR><CR>
 
 nnoremap en :lnext<CR>
 nnoremap ep :lprevious<CR>
@@ -111,7 +112,7 @@ set autoread
 "代码补全
 set completeopt=preview,menu,menuone,longest
 "共享剪贴板
-set clipboard+=unnamed
+set clipboard+=unnamedplus
 "从不备份
 set nobackup
 "make 运行
@@ -136,10 +137,9 @@ set autoindent
 set cindent
 
 " Tab键的宽度
-set tabstop=4
-" 统一缩进为4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 
 " 不要用空格代替制表符
 " 在行和段开始处使用制表符
@@ -181,6 +181,7 @@ set backspace=2
 set whichwrap+=<,>,h,l
 " 可以在buffer的任何地方使用鼠标（类似office中在工作区双击鼠标定位）
 set mouse=a
+set selection=exclusive
 set selectmode=mouse,key
 " 通过使用: commands命令，告诉我们文件的哪一行被改变过
 set report=0
@@ -215,6 +216,7 @@ filetype plugin indent on
 "settings for , 'rust'airline
 let g:airline#extensions#hunks#enabled = 1
 let g:airline#extensions#ycm#enabled = 1
+"let g:airline#extensions#ale#enabled = 1
 let g:airline_powerline_fonts = 1
   if !exists('g:airline_symbols')
     let g:airline_symbols = {}
@@ -296,6 +298,21 @@ autocmd FileType rust let g:tagbar_type_rust = {
 
 map <F10> :call FormatSrc()<CR><CR>
 
+"let g:ale_completion_enabled=1
+
+"let g:ale_linters = {
+"            \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+"            \   'python': ['pyls', 'pylint'],
+"            \   'cpp': ['clangd'],
+"            \   'rust': ['rustc','cargo']
+"            \}
+"
+"let g:ale_fixers = {
+"            \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+"            \   'c': ['clang-format'],
+"            \   'cpp': ['clang-format']
+"            \}
+
 
 let g:haskellmode_completion_ghc=1
 
@@ -335,13 +352,16 @@ autocmd FileType css set shiftwidth=2
 
 
 
-"let g:syntastic_rust_checkers = ['cargo']
+let g:syntastic_rust_checkers = ['cargo']
 let g:syntastic_haskell_checkers = ['hlint', 'ghc-mod']
 let g:syntastic_vue_checkers= ['eslint']
 
 "indentline setting
 let g:indentLine_load=1
 let g:indentLine_char='┆'
+
+" AutoPairs
+let g:AutoPairsMultilineClose=0
 
 
 "dein Scripts-----------------------------
@@ -366,10 +386,14 @@ if dein#load_state('/home/gloit/.vim/bundles')
 
   call dein#add('jiangmiao/auto-pairs')
 
+  "call dein#add('w0rp/ale', {
+  "            \'on_ft' : ['c', 'cpp', 'haskell', 'python', 'javascript', 'rust']
+  "            \})
+
   "{{{ deoplete configs
-  call dein#add('Shougo/deoplete.nvim', {
-              \ 'on_ft' : ['haskell']
-              \ })
+  "call dein#add('Shougo/deoplete.nvim', {
+  "            \ 'on_ft' : ['haskell']
+  "            \ })
   "call dein#config('deoplete.nvim', {
   "            \ 'lazy' : 1, 'on_i' : 1,
   "            \ })
@@ -398,9 +422,9 @@ if dein#load_state('/home/gloit/.vim/bundles')
               \})
 " }}}
 " {{{ rust plugins
-  "call dein#add('racer-rust/vim-racer', {
-  "            \'on_ft' : 'rust'
-  "            \})
+  call dein#add('racer-rust/vim-racer', {
+              \'on_ft' : 'rust'
+              \})
   call dein#add('rust-lang/rust.vim', {
               \'on_ft' : 'rust'
               \})
@@ -428,10 +452,10 @@ if dein#load_state('/home/gloit/.vim/bundles')
               \})
   " }}}
   call dein#add('altercation/vim-colors-solarized')
-  call dein#add('bling/vim-bufferline')
-  call dein#add('scrooloose/syntastic')
+  "call dein#add('scrooloose/syntastic')
   call dein#add('tpope/vim-fugitive')
-  call dein#add('tpope/vim-vinegar')
+  "call dein#add('tpope/vim-vinegar')
+  call dein#add('justinmk/vim-dirvish')
   call dein#add('vim-airline/vim-airline')
   call dein#add('vim-airline/vim-airline-themes')
   call dein#add('majutsushi/tagbar')
@@ -443,12 +467,12 @@ if dein#load_state('/home/gloit/.vim/bundles')
   call dein#add('godlygeek/tabular', {
               \'on_ft': ['markdown', 'javascript']
               \})
-  call dein#add('plasticboy/vim-markdown', {
-              \'on_ft': ['markdown']
-              \})
-  call dein#add('nelstrom/vim-markdown-folding', {
-              \'on_ft': ['markdown']
-              \})
+  "call dein#add('plasticboy/vim-markdown', {
+  "            \'on_ft': ['markdown']
+  "            \})
+  "call dein#add('nelstrom/vim-markdown-folding', {
+  "            \'on_ft': ['markdown']
+  "            \})
   "call dein#add('suan/vim-instant-markdown', {
   "            \'on_ft': ['markdown']
   "            \})
@@ -457,9 +481,16 @@ if dein#load_state('/home/gloit/.vim/bundles')
   "call dein#add('thomasding/vim-coqide')
   call dein#add('/home/gloit/.vim/bundles/repos/github.com/thomasding/vim-coqide')
 
+  call dein#add('florentc/vim-tla')
+
+
 
   " You can specify revision/branch/tag.
   "call dein#add('Shougo/vimshell')
+
+  call dein#add('sheerun/vim-polyglot')
+
+  call dein#add('qpkorr/vim-bufkill')
 
   " Required:
   call dein#end()
@@ -503,12 +534,11 @@ let g:tern#filetypes = [
                 \ ]
 
 " vim markdown config
-let g:vim_markdown_math = 1
+"let g:vim_markdown_math = 1
 
 
 set expandtab
 
-" neosnippet
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -528,7 +558,7 @@ if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
 
-let g:ycm_python_binary_path = '/usr/bin/python'
+let g:ycm_python_binary_path = '/usr/bin/python3'
 " auto trigger completion
 let g:ycm_auto_trigger  = 1
 
@@ -547,6 +577,7 @@ let g:ycm_filetype_blacklist = {
 
 let g:ycm_warning_symbol = '*>'
 let g:ycm_confirm_extra_conf = 0
+let g:ycm_always_populate_location_list = 1
 
 
 
@@ -564,3 +595,16 @@ let g:netrw_list_hide = ''
 
 " inccommand on
 set icm=split
+au BufRead *.gnu set filetype=gnuplot
+let g:clipboard = {
+      \   'name': 'win32yank',
+      \   'copy': {
+      \      '+': 'win32yank.exe -i --crlf',
+      \      '*': 'win32yank.exe -i --crlf',
+      \    },
+      \   'paste': {
+      \      '+': 'win32yank.exe -o --lf',
+      \      '*': 'win32yank.exe -o --lf',
+      \   },
+      \   'cache_enabled': 1,
+      \ }
