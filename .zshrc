@@ -2,7 +2,7 @@
 export PATH=/opt/cuda/bin/:$HOME/.local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/home/gloit/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 fpath+=~/.zfunc
 
@@ -90,4 +90,3 @@ source $ZSH/oh-my-zsh.sh
 alias grep='grep --color'
 alias ls='ls --color=auto'
 export RUST_SRC_PATH=`rustc --print sysroot`/lib/rustlib/src/rust/src
-
