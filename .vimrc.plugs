@@ -22,10 +22,6 @@ set foldenable      " 允许折叠
 set foldcolumn=0
 set foldlevel=1
 
-call plug#begin('/home/gloit/.vim/bundle')
-Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp', 'haskell', 'python', 'javascript', 'rust'] }
-call plug#end()
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "键盘命令
@@ -62,68 +58,23 @@ nnoremap en :lnext<CR>
 nnoremap ep :lprevious<CR>
 
 
-" 选中状态下 Ctrl+c 复制
-vmap <C-c> "+y
-"C，C++ 按F5编译运行
-map <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-    exec "w"
-    if &filetype == 'python'
-        "exec "!ipython %"
-    elseif &filetype == 'c'
-        exec "!gcc -std=c99 % -o %<"
-        exec "! ./%<"
-    elseif &filetype == 'cpp'
-        exec "!g++ -std=c++11 % -o %<"
-        exec "! ./%<"
-    elseif &filetype == 'java'
-        exec "!javac %"
-        exec "!java %<"
-    elseif &filetype == 'sh'
-        :!./%
-    elseif &filetype == 'rust'
-        exec "!cargo run"
-    endif
-endfunc
-"C,C++的调试
-map <F8> :call Rungdb()<CR>
-func! Rungdb()
-    exec "w"
-    if &filetype == 'c'
-        exec "!gcc % -g -o %<"
-        exec "!gdb ./%<"
-    elseif &filetype == 'cpp'
-        exec "!g++ & -g -o %<"
-        exec "!gdb ./%<"
-    endif
-endfunc
-
-
-
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 ""实用设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 设置当文件被改动时自动载入
 set autoread
-" quickfix模式
-""autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
 "代码补全
 set completeopt=preview,menu,menuone,longest
 "共享剪贴板
 set clipboard+=unnamedplus
 "从不备份
 set nobackup
-"make 运行
-:set makeprg=g++\ -Wall\ \ %
 "自动保存
 set autowrite
 set ruler                   " 打开状态栏标尺
 set cursorline              " 突出显示当前行
 set magic                   " 设置魔术
-set guioptions-=T           " 隐藏工具栏
-set guioptions-=m           " 隐藏菜单栏
 
 " 不要使用vi的键盘模式，而是vim自己的
 set nocompatible
@@ -195,7 +146,8 @@ set matchtime=1
 set scrolloff=3
 " 为C程序提供自动缩进
 set smartindent
-set listchars=tab:>-,eol:-,trail:-,precedes:<,extends:>
+set listchars=tab:>-,trail:-,precedes:<,extends:>
+set list
 "自动补全
 function! ClosePair(char)
 if getline('.')[col('.') - 1] == a:char
@@ -215,8 +167,6 @@ filetype plugin indent on
 
 "settings for , 'rust'airline
 let g:airline#extensions#hunks#enabled = 1
-let g:airline#extensions#ycm#enabled = 1
-"let g:airline#extensions#ale#enabled = 1
 let g:airline_powerline_fonts = 1
   if !exists('g:airline_symbols')
     let g:airline_symbols = {}
@@ -264,7 +214,7 @@ autocmd FileType haskell let g:tagbar_type_haskell = {
 
 autocmd FileType markdown let g:tagbar_type_markdown = {
     \ 'ctagstype': 'markdown',
-    \ 'ctagsbin' : '/home/gloit/.local/bin/markdown2ctags',
+    \ 'ctagsbin' : $HOME . '/.local/bin/markdown2ctags',
     \ 'ctagsargs' : '-f - --sort=yes',
     \ 'kinds' : [
         \ 's:sections',
@@ -290,28 +240,7 @@ autocmd FileType rust let g:tagbar_type_rust = {
         \'i:impls,trait implementations',
     \]
     \}
-" }}} 
-
-
-
-"代码格式优化化
-
-map <F10> :call FormatSrc()<CR><CR>
-
-"let g:ale_completion_enabled=1
-
-"let g:ale_linters = {
-"            \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-"            \   'python': ['pyls', 'pylint'],
-"            \   'cpp': ['clangd'],
-"            \   'rust': ['rustc','cargo']
-"            \}
-"
-"let g:ale_fixers = {
-"            \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-"            \   'c': ['clang-format'],
-"            \   'cpp': ['clang-format']
-"            \}
+" }}}
 
 
 let g:haskellmode_completion_ghc=1
@@ -329,7 +258,7 @@ autocmd FileType haskell let g:syntastic_always_populate_loc_list = 1
 
 
 autocmd FileType rust set hidden
-autocmd FileType rust let g:racer_cmd = "/home/gloit/.cargo/bin/racer"
+autocmd FileType rust let g:racer_cmd = $HOME . "/.cargo/bin/racer"
 autocmd FileType rust let g:rustfmt_command = "rustfmt"
 autocmd FileType rust let g:rustfmt_autosave = 1
 autocmd FileType rust let g:racer_experimental_completer=1
@@ -354,7 +283,6 @@ autocmd FileType css set shiftwidth=2
 
 let g:syntastic_rust_checkers = ['cargo']
 let g:syntastic_haskell_checkers = ['hlint', 'ghc-mod']
-let g:syntastic_vue_checkers= ['eslint']
 
 "indentline setting
 let g:indentLine_load=1
@@ -370,15 +298,15 @@ if &compatible
 endif
 
 " Required:
-set runtimepath+=/home/gloit/.vim/bundles/repos/github.com/Shougo/dein.vim
+exec 'set runtimepath+=' . $HOME . '/.vim/bundles/repos/github.com/Shougo/dein.vim'
 
 " Required:
-if dein#load_state('/home/gloit/.vim/bundles')
-  call dein#begin('/home/gloit/.vim/bundles')
+if dein#load_state($HOME . '/.vim/bundles')
+  call dein#begin($HOME . '/.vim/bundles')
 
   " Let dein manage dein
   " Required:
-  call dein#add('/home/gloit/.vim/bundles/repos/github.com/Shougo/dein.vim')
+  call dein#add($HOME . '/.vim/bundles/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here:
   "
@@ -386,29 +314,16 @@ if dein#load_state('/home/gloit/.vim/bundles')
 
   call dein#add('jiangmiao/auto-pairs')
 
-  "call dein#add('w0rp/ale', {
-  "            \'on_ft' : ['c', 'cpp', 'haskell', 'python', 'javascript', 'rust']
-  "            \})
-
+  call dein#add('sbdchd/neoformat')
   "{{{ deoplete configs
-  "call dein#add('Shougo/deoplete.nvim', {
-  "            \ 'on_ft' : ['haskell']
-  "            \ })
-  "call dein#config('deoplete.nvim', {
-  "            \ 'lazy' : 1, 'on_i' : 1,
-  "            \ })
-  "call dein#add('zchee/deoplete-clang', {
-  "            \'on_ft' : ['c', 'cpp', 'h', 'hpp']
-  "            \ })
-  "call dein#add('carlitux/deoplete-ternjs',{
-  "            \'on_ft' : ['javascript']
-  "            \ })
-  "call dein#add('zchee/deoplete-jedi', {
-  "            \'on_ft' : ['python']
-  "            \ })
-  "call dein#add('OrangeT/vim-csharp',{
-  "            \'on_ft' : ['cs']
-              \ })
+  call dein#add('Shougo/deoplete.nvim')
+  call dein#config('deoplete.nvim', {
+                  \'lazy' : 1, 'on_i' : 1,
+                  \})
+  call dein#add('autozimu/LanguageClient-neovim', {
+                \'build' : 'bash install.sh'
+                \})
+  call dein#add('junegunn/fzf')
   "}}}
 " {{{haskell plugins
   call dein#add('eagletmt/ghcmod-vim', {
@@ -433,6 +348,12 @@ if dein#load_state('/home/gloit/.vim/bundles')
   call dein#add('pangloss/vim-javascript', {
               \'on_ft' : 'javascript'
               \})
+
+  " {{{ rust plugins
+  call dein#add('derekwyatt/vim-scala', {
+                \'on_ft': 'scala'
+                \})
+  " }}}
 
   call dein#add('Shougo/neosnippet-snippets')
   call dein#add('Shougo/neosnippet.vim')
@@ -467,19 +388,10 @@ if dein#load_state('/home/gloit/.vim/bundles')
   call dein#add('godlygeek/tabular', {
               \'on_ft': ['markdown', 'javascript']
               \})
-  "call dein#add('plasticboy/vim-markdown', {
-  "            \'on_ft': ['markdown']
-  "            \})
-  "call dein#add('nelstrom/vim-markdown-folding', {
-  "            \'on_ft': ['markdown']
-  "            \})
-  "call dein#add('suan/vim-instant-markdown', {
-  "            \'on_ft': ['markdown']
-  "            \})
 
   call dein#add('ararslan/llvm.vim')
   "call dein#add('thomasding/vim-coqide')
-  call dein#add('/home/gloit/.vim/bundles/repos/github.com/thomasding/vim-coqide')
+  call dein#add($HOME . '/.vim/bundles/repos/github.com/thomasding/vim-coqide')
 
   call dein#add('florentc/vim-tla')
 
@@ -513,10 +425,6 @@ colorscheme solarized
 
 
 "deoplete setting
-
-"let g:deoplete#sources#clang#libclang_path='/usr/lib/libclang.so'
-"let g:deoplete#sources#clang#clang_header='/usr/lib/clang'
-"
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 
@@ -539,54 +447,47 @@ let g:tern#filetypes = [
 
 set expandtab
 
+let g:neosnippet#enable_complete_done = 1
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-" SuperTab like snippets behavior.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-"imap <expr><TAB>
-" \ pumvisible() ? "\<C-n>" :
-" \ neosnippet#expandable_or_jumpable() ?
-" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+function! s:check_back_space() abort "{{{
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction   "}}}
+imap <expr><TAB>
+  \ pumvisible()? "\<C-n>" :
+  \ neosnippet#expandable_or_jumpable() ?
+  \ "\<Plug>(neosnippet_expand_or_jump)" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ deoplete#manual_complete()
 
 " For conceal markers.
 if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
 
-let g:ycm_python_binary_path = '/usr/bin/python3'
-" auto trigger completion
-let g:ycm_auto_trigger  = 1
+" NeoFormat
+let clangformat_dir = $HOME . "/llvm-install/bin/clang-format"
+let g:neoformat_c_clangformat = {'exe': clangformat_dir}
+let g:neoformat_cpp_clangformat = {'exe': clangformat_dir}
 
-let g:ycm_filetype_blacklist = {
-      \ 'tagbar' : 1,
-      \ 'qf' : 1,
-      \ 'notes' : 1,
-      \ 'markdown' : 1,
-      \ 'unite' : 1,
-      \ 'text' : 1,
-      \ 'vimwiki' : 1,
-      \ 'pandoc' : 1,
-      \ 'infolog' : 1,
-      \ 'mail' : 1
-      \}
+let g:neoformat_enabled_c = ['clangformat']
+let g:neoformat_enabled_cpp = ['clangformat']
 
-let g:ycm_warning_symbol = '*>'
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_always_populate_location_list = 1
+noremap <silent> <F5> :call LanguageClient_contextMenu()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> gi :call LanguageClient_textDocument_implementation()<CR>
+nnoremap <silent> gt :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gf :call LanguageClient_textDocument_codeAction()<CR>
 
+let g:LanguageClient_serverCommands = {
+  \ 'cpp': [$HOME . '/llvm-install/bin/clangd'],
+  \ 'c': [$HOME . '/llvm-install/bin/clangd'],
+  \ }
 
-
-nnoremap <silent> gd :YcmCompleter GoToImprecise<CR>
-nnoremap <silent> gt :YcmCompleter GetType<CR>
-nnoremap <silent> gf :YcmCompleter FixIt<CR>
-autocmd FileType python nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
-autocmd FileType rust nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
-autocmd FileType javascript nnoremap <silent> gd :YcmCompleter GoToDefinition<CR>
 let g:vim_markdown_folding_disabled = 1
 
 tnoremap <ESC> <C-\><C-n>
