@@ -267,7 +267,7 @@ autocmd FileType rust let g:syntastic_always_populate_loc_list = 1
 autocmd FileType rust let g:rust_use_custom_ctags_defs = 1
 
 
-autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/,$RUST_SRC_PATH/libstd/rusty-tags.vi
+autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;
 autocmd BufWrite *.rs exec "!rusty-tags vi --quiet --start-dir=" . expand('%:p:h') . "&" | redraw!
 
 autocmd FileType javascript set tabstop=2
@@ -297,12 +297,18 @@ if &compatible
   set nocompatible               " Be iMproved
 endif
 
+let g:python_host_prog = '/usr/bin/python2'
+let g:python3_host_prog = '/usr/bin/python3'
+
 " Required:
 exec 'set runtimepath+=' . $HOME . '/.vim/bundles/repos/github.com/Shougo/dein.vim'
 
 " Required:
 if dein#load_state($HOME . '/.vim/bundles')
+  let g:rc_dir = expand('~/.config/nvim/')
+  let s:toml = g:rc_dir . 'lazy.toml'
   call dein#begin($HOME . '/.vim/bundles')
+  call dein#load_toml(s:toml, {'lazy': 1})
 
   " Let dein manage dein
   " Required:
@@ -310,16 +316,10 @@ if dein#load_state($HOME . '/.vim/bundles')
 
   " Add or remove your plugins here:
   "
-
-
   call dein#add('jiangmiao/auto-pairs')
 
   call dein#add('sbdchd/neoformat')
   "{{{ deoplete configs
-  call dein#add('Shougo/deoplete.nvim')
-  call dein#config('deoplete.nvim', {
-                  \'lazy' : 1, 'on_i' : 1,
-                  \})
   call dein#add('autozimu/LanguageClient-neovim', {
                 \'build' : 'bash install.sh'
                 \})
@@ -379,7 +379,7 @@ if dein#load_state($HOME . '/.vim/bundles')
   call dein#add('justinmk/vim-dirvish')
   call dein#add('vim-airline/vim-airline')
   call dein#add('vim-airline/vim-airline-themes')
-  call dein#add('majutsushi/tagbar')
+  call dein#add('preservim/tagbar')
 
   call dein#add('posva/vim-vue', {
               \'on_ft': ['vue']
@@ -424,11 +424,6 @@ colorscheme solarized
 "End dein Scripts-------------------------
 
 
-"deoplete setting
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-
-
 
 " Use deoplete.
 let g:tern_request_timeout = 1
@@ -449,9 +444,9 @@ set expandtab
 
 let g:neosnippet#enable_complete_done = 1
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+xmap <C-k> <Plug>(neosnippet_expand_target)
 
 function! s:check_back_space() abort "{{{
   let col = col('.') - 1
@@ -478,6 +473,7 @@ let g:neoformat_enabled_c = ['clangformat']
 let g:neoformat_enabled_cpp = ['clangformat']
 
 noremap <silent> <F5> :call LanguageClient_contextMenu()<CR>
+nnoremap <silent> ge :call LanguageClient#explainErrorAtPoint()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> gi :call LanguageClient_textDocument_implementation()<CR>
 nnoremap <silent> gt :call LanguageClient_textDocument_hover()<CR>
@@ -486,6 +482,8 @@ nnoremap <silent> gf :call LanguageClient_textDocument_codeAction()<CR>
 let g:LanguageClient_serverCommands = {
   \ 'cpp': [$HOME . '/llvm-install/bin/clangd'],
   \ 'c': [$HOME . '/llvm-install/bin/clangd'],
+  \ 'rust': [$HOME . '/.cargo/bin/rls'],
+  \ 'python': [$HOME . '/.local/bin/pyls'],
   \ }
 
 let g:vim_markdown_folding_disabled = 1

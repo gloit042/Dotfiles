@@ -1,0 +1,12 @@
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+hook_add = '''
+let g:deoplete#enable_at_startup = 1
+'''
+hook_post_source = '''
+call deoplete#custom#option({
+    \ 'auto_complete_delay': 200,
+    \ 'smart_case': v:true,
+    \ })
+'''
+on_i = 1
