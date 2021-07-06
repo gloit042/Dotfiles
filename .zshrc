@@ -89,4 +89,5 @@ source $ZSH/oh-my-zsh.sh
 
 alias grep='grep --color'
 alias ls='ls --color=auto'
-export RUST_SRC_PATH=`rustc --print sysroot`/lib/rustlib/src/rust/src
+alias vim='nvim'
+export RUST_SRC_PATH=`rustc --print sysroot`/lib/rustlib/src/rust/library

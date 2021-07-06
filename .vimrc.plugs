@@ -301,113 +301,110 @@ let g:python_host_prog = '/usr/bin/python2'
 let g:python3_host_prog = '/usr/bin/python3'
 
 " Required:
-exec 'set runtimepath+=' . $HOME . '/.vim/bundles/repos/github.com/Shougo/dein.vim'
+exec 'set runtimepath+=' . $HOME . '/.cache/dein/repos/github.com/Shougo/dein.vim'
 
 " Required:
-if dein#load_state($HOME . '/.vim/bundles')
-  let g:rc_dir = expand('~/.config/nvim/')
-  let s:toml = g:rc_dir . 'lazy.toml'
-  call dein#begin($HOME . '/.vim/bundles')
-  call dein#load_toml(s:toml, {'lazy': 1})
+let g:rc_dir = expand('~/.config/nvim/')
+let s:toml = g:rc_dir . 'lazy.toml'
+call dein#begin($HOME . '/.cache/dein')
+call dein#load_toml(s:toml, {'lazy': 1})
 
-  " Let dein manage dein
-  " Required:
-  call dein#add($HOME . '/.vim/bundles/repos/github.com/Shougo/dein.vim')
+" Let dein manage dein
+" Required:
+call dein#add($HOME . '/.cache/dein/repos/github.com/Shougo/dein.vim')
 
-  " Add or remove your plugins here:
-  "
-  call dein#add('jiangmiao/auto-pairs')
+" Add or remove your plugins here:
+"
+call dein#add('jiangmiao/auto-pairs')
 
-  call dein#add('sbdchd/neoformat')
-  "{{{ deoplete configs
-  call dein#add('autozimu/LanguageClient-neovim', {
-                \'build' : 'bash install.sh'
-                \})
-  call dein#add('junegunn/fzf')
-  "}}}
+call dein#add('sbdchd/neoformat')
+"{{{ deoplete configs
+call dein#add('autozimu/LanguageClient-neovim', {
+              \'build' : 'bash install.sh'
+              \})
+call dein#add('junegunn/fzf')
+"}}}
 " {{{haskell plugins
-  call dein#add('eagletmt/ghcmod-vim', {
-              \'on_ft' : 'haskell'
-              \})
-  call dein#add('eagletmt/neco-ghc', {
-              \'on_ft' : 'haskell'
-              \})
-  call dein#add('itchyny/vim-haskell-indent', {
-              \'on_ft' : 'haskell'
-              \})
+call dein#add('eagletmt/ghcmod-vim', {
+            \'on_ft' : 'haskell'
+            \})
+call dein#add('eagletmt/neco-ghc', {
+            \'on_ft' : 'haskell'
+            \})
+call dein#add('itchyny/vim-haskell-indent', {
+            \'on_ft' : 'haskell'
+            \})
 " }}}
 " {{{ rust plugins
-  call dein#add('racer-rust/vim-racer', {
-              \'on_ft' : 'rust'
-              \})
-  call dein#add('rust-lang/rust.vim', {
-              \'on_ft' : 'rust'
+call dein#add('racer-rust/vim-racer', {
+            \'on_ft' : 'rust'
+            \})
+call dein#add('rust-lang/rust.vim', {
+            \'on_ft' : 'rust'
+            \})
+" }}}
+
+call dein#add('pangloss/vim-javascript', {
+            \'on_ft' : 'javascript'
+            \})
+
+" {{{ rust plugins
+call dein#add('derekwyatt/vim-scala', {
+              \'on_ft': 'scala'
               \})
 " }}}
 
-  call dein#add('pangloss/vim-javascript', {
-              \'on_ft' : 'javascript'
-              \})
+call dein#add('Shougo/neosnippet-snippets')
+call dein#add('Shougo/neosnippet.vim')
+call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+call dein#add('Yggdroot/LeaderF')
+" {{{ indentline formats
+call dein#add('Yggdroot/indentLine', {
+            \'on_ft' : [
+            \             'rust',
+            \             'python',
+            \             'c',
+            \             'cpp',
+            \             'haskell',
+            \             'vim',
+            \             'makefile'
+            \          ]
+            \})
+" }}}
+call dein#add('altercation/vim-colors-solarized')
+"call dein#add('scrooloose/syntastic')
+call dein#add('tpope/vim-fugitive')
+"call dein#add('tpope/vim-vinegar')
+call dein#add('justinmk/vim-dirvish')
+call dein#add('vim-airline/vim-airline')
+call dein#add('vim-airline/vim-airline-themes')
+call dein#add('preservim/tagbar')
 
-  " {{{ rust plugins
-  call dein#add('derekwyatt/vim-scala', {
-                \'on_ft': 'scala'
-                \})
-  " }}}
+call dein#add('posva/vim-vue', {
+            \'on_ft': ['vue']
+            \})
 
-  call dein#add('Shougo/neosnippet-snippets')
-  call dein#add('Shougo/neosnippet.vim')
-  call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
-  call dein#add('Yggdroot/LeaderF')
-  " {{{ indentline formats
-  call dein#add('Yggdroot/indentLine', {
-              \'on_ft' : [
-              \             'rust',
-              \             'python',
-              \             'c',
-              \             'cpp',
-              \             'haskell',
-              \             'vim',
-              \             'makefile'
-              \          ]
-              \})
-  " }}}
-  call dein#add('altercation/vim-colors-solarized')
-  "call dein#add('scrooloose/syntastic')
-  call dein#add('tpope/vim-fugitive')
-  "call dein#add('tpope/vim-vinegar')
-  call dein#add('justinmk/vim-dirvish')
-  call dein#add('vim-airline/vim-airline')
-  call dein#add('vim-airline/vim-airline-themes')
-  call dein#add('preservim/tagbar')
+call dein#add('godlygeek/tabular', {
+            \'on_ft': ['markdown', 'javascript']
+            \})
 
-  call dein#add('posva/vim-vue', {
-              \'on_ft': ['vue']
-              \})
+call dein#add('ararslan/llvm.vim')
+"call dein#add('thomasding/vim-coqide')
+call dein#add($HOME . '/.vim/bundles/repos/github.com/thomasding/vim-coqide')
 
-  call dein#add('godlygeek/tabular', {
-              \'on_ft': ['markdown', 'javascript']
-              \})
-
-  call dein#add('ararslan/llvm.vim')
-  "call dein#add('thomasding/vim-coqide')
-  call dein#add($HOME . '/.vim/bundles/repos/github.com/thomasding/vim-coqide')
-
-  call dein#add('florentc/vim-tla')
+call dein#add('florentc/vim-tla')
 
 
 
-  " You can specify revision/branch/tag.
-  "call dein#add('Shougo/vimshell')
+" You can specify revision/branch/tag.
+"call dein#add('Shougo/vimshell')
 
-  call dein#add('sheerun/vim-polyglot')
+call dein#add('sheerun/vim-polyglot')
 
-  call dein#add('qpkorr/vim-bufkill')
+call dein#add('qpkorr/vim-bufkill')
 
-  " Required:
-  call dein#end()
-  call dein#save_state()
-endif
+" Required:
+call dein#end()
 
 
 " Required:
